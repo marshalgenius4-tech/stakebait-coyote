@@ -26,7 +26,7 @@ serde_json = { version = "1", optional = true }
 soroban-sdk = { workspace = true, features = ["testutils"] }
 soroban-env-host = { version = "28", features = ["testutils"] }
 crucible-macros = { workspace = true, optional = true }
-ed25519-dalek = { version = "2.1", features = ["rand_core"] }
+ed25519-dalek = { version = "3.0", features = ["rand_core"] }
 k256 = { version = "0.13", features = ["ecdsa", "arithmetic", "pkcs8"] }
 p256 = { version = "0.13", features = ["ecdsa", "arithmetic", "pkcs8"] }
 rand = "0.8"
