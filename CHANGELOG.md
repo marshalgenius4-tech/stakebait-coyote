@@ -1,3 +1,9 @@
+## [1.35.0](https://github.com/marshalgenius4-tech/stakebait-coyote/compare/v1.34.0...v1.35.0) (2026-10-09)
+
+### Features
+
+* separate into dual workspaces, resolve build errors, and rename project to stakebait-Coyote ([302c4d4](https://github.com/marshalgenius4-tech/stakebait-coyote/commit/302c4d473cf200d47d6b4456ea8db82b45ebc78e))
+
 ## [1.34.0](https://github.com/benelabs/crucible/compare/v1.33.0...v1.34.0) (2026-10-01)
 
 ### Features
