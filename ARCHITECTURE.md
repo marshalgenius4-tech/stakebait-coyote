@@ -1,10 +1,10 @@
-# Crucible Architecture Overview
+# stakebait-Coyote Architecture Overview
 
-This document describes the high-level architecture of the Crucible project, clarifying crate ownership, module boundaries, and dependency directions to help new contributors understand where functionality belongs.
+This document describes the high-level architecture of the stakebait-Coyote project, clarifying crate ownership, module boundaries, and dependency directions to help new contributors understand where functionality belongs.
 
 ## Project Overview
 
-Crucible is a **batteries-included testing toolkit for Soroban smart contracts**, analogous to Jest (JavaScript) or Hardhat (Solidity). It combines:
+stakebait-Coyote is a **batteries-included testing toolkit for Soroban smart contracts**, analogous to Jest (JavaScript) or Hardhat (Solidity). It combines:
 
 - A **core Soroban testing toolkit** with builders, helpers, assertion macros, and fixtures
 - A **proc-macro crate** providing derive support

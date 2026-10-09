@@ -1,6 +1,7 @@
 [workspace]
+resolver = "2"
+exclude = ["backend"]
 members = [
-    "backend",
     "contracts/crucible",
     "contracts/treasury",
     "contracts/proxy",
@@ -20,7 +21,7 @@ members = [
     "examples/escrow-multi-arbiter",
     "examples/flash-mint",
 ]
-resolver = "2"
+
 
 [workspace.package]
 version = "1.34.0"
@@ -30,7 +31,7 @@ license = "MIT"
 description = "A batteries-included testing toolkit for Soroban smart contracts."
 repository = "https://github.com/anumukul/crucible"
 homepage = "https://github.com/anumukul/crucible"
-authors = ["Crucible Contributors"]
+authors = ["stakebait-Coyote Contributors"]
 
 [profile.release]
 opt-level = 3

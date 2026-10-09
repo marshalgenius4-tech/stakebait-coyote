@@ -1,6 +1,6 @@
-# Crucible Backend
+# stakebait-Coyote Backend
 
-High-performance Rust backend for the Crucible smart contract testing platform, providing performance profiling, mock service layers, specialized serialization utilities, and robust background monitoring.
+High-performance Rust backend for the stakebait-Coyote smart contract testing platform, providing performance profiling, mock service layers, specialized serialization utilities, and robust background monitoring.
 
 ## 🚀 Tech Stack
 - **Web Framework**: Axum (async Rust)

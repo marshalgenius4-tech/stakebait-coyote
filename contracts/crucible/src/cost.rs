@@ -50,11 +50,35 @@ impl std::fmt::Display for CostReport {
 
 impl CostReport {
     pub fn new(instructions: u64, memory: u64) -> Self {
-        Self { instructions, memory }
+        Self {
+            instructions,
+            memory,
+            fee_stroops: None,
+            #[cfg(feature = "std")]
+            report_cache: std::sync::OnceLock::new(),
+        }
     }
+
+    pub fn new_with_fee_estimate(instructions: u64, memory: u64, fee_stroops: i128) -> Self {
+        Self {
+            instructions,
+            memory,
+            fee_stroops: Some(fee_stroops),
+            #[cfg(feature = "std")]
+            report_cache: std::sync::OnceLock::new(),
+        }
+    }
+
     pub fn instructions(&self) -> u64 { self.instructions }
     pub fn memory_bytes(&self) -> u64 { self.memory }
-    pub fn fee_stroops(&self) -> i64 { (self.instructions / 100) as i64 }
+    pub fn fee_stroops(&self) -> i64 {
+        self.fee_stroops
+            .map(|fee| fee as i64)
+            .unwrap_or((self.instructions / 100) as i64)
+    }
+    pub fn uses_sdk_fee_estimate(&self) -> bool {
+        self.fee_stroops.is_some()
+    }
     pub fn report(&self) -> String {
         format!("Instructions: {}\nMemory: {} bytes\nFee: {} stroops",
             format_with_commas(self.instructions),

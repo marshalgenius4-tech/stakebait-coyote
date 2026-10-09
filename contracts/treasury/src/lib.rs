@@ -17,6 +17,29 @@ enum DataKey {
     SpentInPeriod,   // i128 — amount withdrawn in current period
     /// Ledger sequence at which the current spending period started.
     LastResetSequence, // u32
+    Guardians,       // Vec<Address> — can cancel queued withdrawals
+    NextOpId,        // u64
+    PendingOps,      // Map<u64, PendingWithdrawal>
+    /// Withdrawals at or above this amount require a timelock queue.
+    TimelockThreshold, // i128
+    /// Base delay in ledgers applied to every queued withdrawal.
+    TimelockBaseDelay, // u64
+    /// Extra ledgers of delay per `TimelockUnit` of transfer value.
+    TimelockPerUnit, // u64
+    /// Value unit used to scale the proportional delay component.
+    TimelockUnit, // i128
+}
+
+/// A multi-sig withdrawal waiting out its timelock before execution.
+#[contracttype]
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub struct PendingWithdrawal {
+    pub to: Address,
+    pub token: Address,
+    pub amount: i128,
+    /// Ledger sequence after which [`Treasury::execute_withdrawal`] may run.
+    pub execute_after: u64,
+    pub cancelled: bool,
 }
 
 /// Approximate ledgers per day (86_400s / 5s close). Period resets are tied to
@@ -42,6 +65,14 @@ pub enum ContractError {
     ReentrancyGuardLocked = 8,
     /// Withdrawal would exceed the daily spending limit for the current period.
     SpendingLimitExceeded = 9,
+    /// Queued withdrawal id was unknown or already consumed.
+    UnknownPendingOp = 10,
+    /// Timelock has not elapsed yet.
+    TimelockNotElapsed = 11,
+    /// Guardians (or admins) cancelled this withdrawal during the window.
+    WithdrawalCancelled = 12,
+    /// Caller is neither an admin nor a guardian.
+    NotGuardian = 13,
 }
 
 /// Default: transfers ≥ this amount must be queued (stroops / token base units).
@@ -89,6 +120,23 @@ impl Treasury {
         env.storage().instance().set(&DataKey::Quorum, &quorum);
         let balances: Map<(Address, Address), i128> = Map::new(&env);
         env.storage().instance().set(&DataKey::Balances, &balances);
+        let guardians: Vec<Address> = Vec::new(&env);
+        env.storage().instance().set(&DataKey::Guardians, &guardians);
+        env.storage().instance().set(&DataKey::NextOpId, &1u64);
+        let pending: Map<u64, PendingWithdrawal> = Map::new(&env);
+        env.storage().instance().set(&DataKey::PendingOps, &pending);
+        env.storage()
+            .instance()
+            .set(&DataKey::TimelockThreshold, &DEFAULT_TIMELOCK_THRESHOLD);
+        env.storage()
+            .instance()
+            .set(&DataKey::TimelockBaseDelay, &DEFAULT_BASE_DELAY);
+        env.storage()
+            .instance()
+            .set(&DataKey::TimelockPerUnit, &DEFAULT_PER_UNIT_DELAY);
+        env.storage()
+            .instance()
+            .set(&DataKey::TimelockUnit, &DEFAULT_VALUE_UNIT);
         // Spending period keyed to ledger sequence (not wall-clock timestamp).
         env.storage().instance().set(&DataKey::DailyLimit, &daily_limit);
         env.storage().instance().set(&DataKey::SpentInPeriod, &0i128);
@@ -97,6 +145,67 @@ impl Treasury {
             .set(&DataKey::LastResetSequence, &env.ledger().sequence());
         env.events()
             .publish((symbol_short!("init"),), (admins, quorum));
+    }
+
+    fn require_quorum(env: &Env, signers: &Vec<Address>) {
+        for s in signers.iter() {
+            s.require_auth();
+        }
+        let quorum: u32 = env.storage().instance().get(&DataKey::Quorum).unwrap();
+        let admins: Vec<Address> = env.storage().instance().get(&DataKey::Admins).unwrap();
+        let mut valid = 0u32;
+        for s in signers.iter() {
+            if admins.iter().any(|a| a == s) {
+                valid += 1;
+            }
+        }
+        if valid < quorum {
+            panic_with_error!(env, ContractError::InsufficientQuorum);
+        }
+    }
+
+    /// Add a guardian who may cancel queued withdrawals during the timelock window.
+    /// Requires admin multi-sig quorum.
+    pub fn add_guardian(env: Env, guardian: Address, signers: Vec<Address>) {
+        Self::require_quorum(&env, &signers);
+        let mut guardians: Vec<Address> = env
+            .storage()
+            .instance()
+            .get(&DataKey::Guardians)
+            .unwrap_or(Vec::new(&env));
+        if !guardians.iter().any(|g| g == guardian) {
+            guardians.push_back(guardian.clone());
+            env.storage()
+                .instance()
+                .set(&DataKey::Guardians, &guardians);
+            env.events()
+                .publish((symbol_short!("guardian"),), (symbol_short!("added"), guardian));
+        }
+    }
+
+    /// Configure timelock parameters (threshold + proportional delay). Admin quorum required.
+    pub fn set_timelock_params(
+        env: Env,
+        threshold: i128,
+        base_delay: u64,
+        per_unit: u64,
+        unit: i128,
+        signers: Vec<Address>,
+    ) {
+        Self::require_quorum(&env, &signers);
+        if threshold < 0 || unit <= 0 {
+            panic_with_error!(&env, ContractError::InsufficientBalance);
+        }
+        env.storage()
+            .instance()
+            .set(&DataKey::TimelockThreshold, &threshold);
+        env.storage()
+            .instance()
+            .set(&DataKey::TimelockBaseDelay, &base_delay);
+        env.storage()
+            .instance()
+            .set(&DataKey::TimelockPerUnit, &per_unit);
+        env.storage().instance().set(&DataKey::TimelockUnit, &unit);
     }
 
     fn is_admin(env: &Env, caller: &Address) -> bool {

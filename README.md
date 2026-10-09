@@ -1,15 +1,12 @@
-# crucible
+# stakebait-Coyote
 
 > A batteries-included testing toolkit for Soroban smart contracts.
 
-[![Crates.io](https://img.shields.io/crates/v/crucible.svg)](https://crates.io/crates/crucible)
-[![Docs.rs](https://docs.rs/crucible/badge.svg)](https://docs.rs/crucible)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![CI](https://github.com/your-org/crucible/actions/workflows/ci.yml/badge.svg)](https://github.com/your-org/crucible/actions)
 
 ---
 
-Writing tests for Soroban contracts today means wiring up environments by hand, copying boilerplate across every repo, and hunting through Stellar docs just to assert that an event fired. **crucible** changes that.
+Writing tests for Soroban contracts today means wiring up environments by hand, copying boilerplate across every repo, and hunting through Stellar docs just to assert that an event fired. **stakebait-Coyote** changes that.
 
 It is a purpose-built Rust testing library for Soroban — analogous to what jest is for JavaScript or hardhat is for Solidity — giving you a rich set of builders, helpers, assertion macros, and fixtures so you can focus on _what_ your contract should do, not on how to set up the harness to prove it.
 
