@@ -381,7 +381,7 @@ dependencies = [
 
 [[package]]
 name = "cross-contract"
-version = "1.34.0"
+version = "1.35.0"
 dependencies = [
  "crucible",
  "soroban-sdk",
@@ -389,11 +389,11 @@ dependencies = [
 
 [[package]]
 name = "crucible"
-version = "1.34.0"
+version = "1.35.0"
 dependencies = [
  "arbitrary",
  "crucible-macros",
- "ed25519-dalek",
+ "ed25519-dalek 3.0.0",
  "k256",
  "p256",
  "rand 0.8.8",
@@ -407,7 +407,7 @@ dependencies = [
 
 [[package]]
 name = "crucible-example-counter"
-version = "1.34.0"
+version = "1.35.0"
 dependencies = [
  "crucible",
  "soroban-sdk",
@@ -415,7 +415,7 @@ dependencies = [
 
 [[package]]
 name = "crucible-example-emergency-circuit-breaker"
-version = "1.34.0"
+version = "1.35.0"
 dependencies = [
  "crucible",
  "soroban-sdk",
@@ -423,7 +423,7 @@ dependencies = [
 
 [[package]]
 name = "crucible-example-emergency-stop"
-version = "1.34.0"
+version = "1.35.0"
 dependencies = [
  "crucible",
  "soroban-sdk",
@@ -431,7 +431,7 @@ dependencies = [
 
 [[package]]
 name = "crucible-example-escrow-multi-arbiter"
-version = "1.34.0"
+version = "1.35.0"
 dependencies = [
  "crucible",
  "soroban-sdk",
@@ -439,7 +439,7 @@ dependencies = [
 
 [[package]]
 name = "crucible-example-flash-mint"
-version = "1.34.0"
+version = "1.35.0"
 dependencies = [
  "crucible",
  "soroban-sdk",
@@ -447,7 +447,7 @@ dependencies = [
 
 [[package]]
 name = "crucible-example-gasless"
-version = "1.34.0"
+version = "1.35.0"
 dependencies = [
  "crucible",
  "soroban-sdk",
@@ -455,7 +455,7 @@ dependencies = [
 
 [[package]]
 name = "crucible-example-lending"
-version = "1.34.0"
+version = "1.35.0"
 dependencies = [
  "crucible",
  "soroban-sdk",
@@ -463,7 +463,7 @@ dependencies = [
 
 [[package]]
 name = "crucible-example-prediction-market"
-version = "1.34.0"
+version = "1.35.0"
 dependencies = [
  "crucible",
  "soroban-sdk",
@@ -471,7 +471,7 @@ dependencies = [
 
 [[package]]
 name = "crucible-example-staking"
-version = "1.34.0"
+version = "1.35.0"
 dependencies = [
  "crucible",
  "soroban-sdk",
@@ -479,7 +479,7 @@ dependencies = [
 
 [[package]]
 name = "crucible-example-time-locked-vault"
-version = "1.34.0"
+version = "1.35.0"
 dependencies = [
  "crucible",
  "soroban-sdk",
@@ -487,7 +487,7 @@ dependencies = [
 
 [[package]]
 name = "crucible-example-token"
-version = "1.34.0"
+version = "1.35.0"
 dependencies = [
  "crucible",
  "soroban-sdk",
@@ -495,7 +495,7 @@ dependencies = [
 
 [[package]]
 name = "crucible-example-vesting"
-version = "1.34.0"
+version = "1.35.0"
 dependencies = [
  "crucible",
  "soroban-sdk",
@@ -503,7 +503,7 @@ dependencies = [
 
 [[package]]
 name = "crucible-macros"
-version = "1.34.0"
+version = "1.35.0"
 dependencies = [
  "crucible",
  "proc-macro2",
@@ -549,6 +549,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "ce6e4c961d6cd6c9a86db418387425e8bdeaf05b3c8bc1411e6dca4c252f1453"
 dependencies = [
  "hybrid-array",
+ "rand_core 0.10.1",
 ]
 
 [[package]]
@@ -594,8 +595,10 @@ dependencies = [
  "curve25519-dalek-derive",
  "digest 0.11.3",
  "fiat-crypto 0.3.0",
+ "rand_core 0.10.1",
  "rustc_version",
  "subtle",
+ "zeroize",
 ]
 
 [[package]]
@@ -811,7 +814,7 @@ dependencies = [
  "digest 0.10.7",
  "elliptic-curve",
  "rfc6979",
- "signature",
+ "signature 2.2.0",
  "spki",
 ]
 
@@ -822,7 +825,16 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "115531babc129696a58c64a4fef0a8bf9e9698629fb97e9e40767d235cfbcd53"
 dependencies = [
  "pkcs8",
- "signature",
+ "signature 2.2.0",
+]
+
+[[package]]
+name = "ed25519"
+version = "3.0.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "29fcf32e6c73d1079f83ab4d782de2d81620346a5f38c6237a86a22f8368980a"
+dependencies = [
+ "signature 3.0.0",
 ]
 
 [[package]]
@@ -832,10 +844,25 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "70e796c081cee67dc755e1a36a0a172b897fab85fc3f6bc48307991f64e4eca9"
 dependencies = [
  "curve25519-dalek 4.1.3",
- "ed25519",
+ "ed25519 2.2.3",
  "rand_core 0.6.4",
  "serde",
- "sha2",
+ "sha2 0.10.9",
+ "subtle",
+ "zeroize",
+]
+
+[[package]]
+name = "ed25519-dalek"
+version = "3.0.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "6ebaa1a2bf1290ab3bfe5a7b771d050ebffab2711c19a81691c683a5144a25de"
+dependencies = [
+ "curve25519-dalek 5.0.0",
+ "ed25519 3.0.0",
+ "rand_core 0.10.1",
+ "sha2 0.11.0",
+ "signature 3.0.0",
  "subtle",
  "zeroize",
 ]
@@ -1282,8 +1309,8 @@ dependencies = [
  "ecdsa",
  "elliptic-curve",
  "once_cell",
- "sha2",
- "signature",
+ "sha2 0.10.9",
+ "signature 2.2.0",
 ]
 
 [[package]]
@@ -1396,7 +1423,7 @@ dependencies = [
  "ecdsa",
  "elliptic-curve",
  "primeorder",
- "sha2",
+ "sha2 0.10.9",
 ]
 
 [[package]]
@@ -1592,6 +1619,12 @@ checksum = "76afc826de14238e6e8c374ddcc1fa19e374fd8dd986b0d2af0d02377261d83c"
 dependencies = [
  "getrandom 0.3.4",
 ]
+
+[[package]]
+name = "rand_core"
+version = "0.10.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "63b8176103e19a2643978565ca18b50549f6101881c443590420e4dc998a3c69"
 
 [[package]]
 name = "rand_xorshift"
@@ -1831,6 +1864,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "sha2"
+version = "0.11.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "446ba717509524cb3f22f17ecc096f10f4822d76ab5c0b9822c5f9c284e825f4"
+dependencies = [
+ "cfg-if",
+ "cpufeatures 0.3.1",
+ "digest 0.11.3",
+]
+
+[[package]]
 name = "sha3"
 version = "0.10.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1854,6 +1898,15 @@ checksum = "77549399552de45a898a580c1b41d445bf730df867cc44e6c0233bbc4b8329de"
 dependencies = [
  "digest 0.10.7",
  "rand_core 0.6.4",
+]
+
+[[package]]
+name = "signature"
+version = "3.0.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "28d567dcbaf0049cb8ac2608a76cd95ff9e4412e1899d389ee400918ca7537f5"
+dependencies = [
+ "rand_core 0.10.1",
 ]
 
 [[package]]
@@ -1922,7 +1975,7 @@ dependencies = [
  "ark-serialize",
  "curve25519-dalek 5.0.0",
  "ecdsa",
- "ed25519-dalek",
+ "ed25519-dalek 2.2.0",
  "elliptic-curve",
  "generic-array",
  "getrandom 0.2.17",
@@ -1936,7 +1989,7 @@ dependencies = [
  "rand 0.8.8",
  "rand_chacha 0.3.1",
  "sec1",
- "sha2",
+ "sha2 0.10.9",
  "sha3",
  "soroban-builtin-sdk-macros",
  "soroban-env-common",
@@ -1986,7 +2039,7 @@ dependencies = [
  "crate-git-revision 0.0.9",
  "ctor",
  "derive_arbitrary",
- "ed25519-dalek",
+ "ed25519-dalek 2.2.0",
  "rand 0.8.8",
  "rustc_version",
  "serde",
@@ -2011,7 +2064,7 @@ dependencies = [
  "macro-string",
  "proc-macro2",
  "quote",
- "sha2",
+ "sha2 0.10.9",
  "soroban-env-common",
  "soroban-spec",
  "soroban-spec-rust",
@@ -2026,7 +2079,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "2f48c8e183fc140ccd89e1fe1663cc605fb18641967c0bb591f64887599fde59"
 dependencies = [
  "base64 0.22.1",
- "sha2",
+ "sha2 0.10.9",
  "stellar-xdr",
  "thiserror 1.0.69",
  "wasmparser",
@@ -2041,7 +2094,7 @@ dependencies = [
  "prettyplease",
  "proc-macro2",
  "quote",
- "sha2",
+ "sha2 0.10.9",
  "soroban-spec",
  "stellar-xdr",
  "syn 2.0.119",
@@ -2125,7 +2178,7 @@ dependencies = [
  "hex",
  "serde",
  "serde_with",
- "sha2",
+ "sha2 0.10.9",
  "stellar-strkey 0.0.13",
 ]
 
